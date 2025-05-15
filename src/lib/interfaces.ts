@@ -3,8 +3,8 @@ import type { ResourceType as ResourceTypeBase } from "./apiplatform";
 type ResourceType = ResourceTypeBase & 'Category' | 'MediaObject' | 'Shortcut' | 'Software';
 
 interface Resource {
-    '@id': string;
-    '@type': ResourceType;
+    '@id'?: string;
+    '@type'?: ResourceType;
 }
 
 export interface MediaObject extends Resource {
@@ -24,7 +24,7 @@ export interface Software extends Resource {
 }
 
 export interface Shortcut extends Resource {
-    id: number;
+    id?: number;
     title: string;
     windows: string;
     macos: string;
@@ -32,7 +32,7 @@ export interface Shortcut extends Resource {
     context: string;
     description: string;
     image?: MediaObject;
-    created_at: Date;
+    created_at?: Date;
     software: Software|string;
     categories: Category[]|string[];
 }
