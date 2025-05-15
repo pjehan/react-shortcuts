@@ -4,9 +4,43 @@ import SoftwareSelect from "./form/SoftwareSelect";
 import FieldGroup from "./form/FieldGroup";
 import Input from "./form/Input";
 import Textarea from "./form/Textarea";
+import type { Shortcut } from "../lib/interfaces";
+import { API_URL } from "../lib/api";
 
-export default function ShortcutForm() {
+interface Props {
+    onSave: () => void;
+}
+
+export default function ShortcutForm({ onSave }: Props) {
     const [isOpen, setIsOpen] = useState(false);
+
+    async function handleSubmit(formData: FormData) {
+        const shortcut: Shortcut = {
+            title: formData.get("title") as string,
+            description: formData.get("description") as string,
+            context: formData.get("context") as string,
+            windows: formData.get("windows") as string,
+            macos: formData.get("macos") as string,
+            linux: formData.get("linux") as string,
+            software: '/software/' + formData.get("software"),
+            categories: formData.getAll("categories").map(category => '/categories/' + category),
+        };
+        const response = await fetch(API_URL + 'shortcuts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(shortcut),
+        });
+        if (response.ok) {
+            const data = await response.json();
+            onSave();
+            console.log("Shortcut added:", data);
+        } else {
+            console.error("Error adding shortcut:", response.statusText);
+        }
+        setIsOpen(false);        
+    }
 
     return (
         <div className="flex flex-col gap-4 p-4 my-4 rounded-lg shadow-md">
@@ -16,7 +50,7 @@ export default function ShortcutForm() {
                     {isOpen ? "Close" : "Open"}
                 </button>
             </div>
-            <form className={`flex flex-col gap-4 ${isOpen ? "h-auto" : "h-0 overflow-hidden"}`} style={{ transition: "height 0.3s ease-in-out" }}>
+            <form action={handleSubmit} className={`flex flex-col gap-4 ${isOpen ? "h-auto" : "h-0 overflow-hidden"}`} style={{ transition: "height 0.3s ease-in-out" }}>
                 <FieldGroup htmlFor="title" label="Title">
                     <Input type="text" id="title" name="title" />
                 </FieldGroup>

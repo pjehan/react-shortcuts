@@ -1,7 +1,9 @@
 import type { Collection } from "./apiplatform";
 
+export const API_URL = 'https://shortcuts.api.pierre-jehan.com/';
+
 export async function getCollection<T>(resource: string, params?: URLSearchParams): Promise<T[]> {
-  let url = 'https://shortcuts.api.pierre-jehan.com/' + resource;
+  let url = API_URL + resource;
   if (params) {
     url += '?' + params.toString();
   }

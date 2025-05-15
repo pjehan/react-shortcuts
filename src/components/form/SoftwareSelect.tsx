@@ -24,6 +24,7 @@ export default function SoftwareSelect({ onChange }: Props) {
     return (
         <Select
             id="software"
+            name="software"
             options={softwareOptions}
             isSearchable
             isClearable

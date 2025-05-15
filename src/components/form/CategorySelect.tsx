@@ -24,6 +24,7 @@ export default function CategorySelect({ onChange }: Props) {
     return (
         <Select
             id="categories"
+            name="categories"
             options={categoryOptions}
             isMulti
             isSearchable

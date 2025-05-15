@@ -33,6 +33,6 @@ export interface Shortcut extends Resource {
     description: string;
     image?: MediaObject;
     created_at: Date;
-    software: Software;
-    categories: Category[];
+    software: Software|string;
+    categories: Category[]|string[];
 }

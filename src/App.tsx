@@ -11,7 +11,7 @@ function App() {
   const [shortcuts, setShortcuts] = useState<Shortcut[]>([]);
   const [isShortcutsLoading, setIsShortcutsLoading] = useState(false);
 
-  useEffect(() => {
+  function refreshShortcuts() {
     setIsShortcutsLoading(true);
     let searchParams = new URLSearchParams();
     if (filters.software) {
@@ -24,6 +24,10 @@ function App() {
       setShortcuts(data);
       setIsShortcutsLoading(false);
     });
+  }
+
+  useEffect(() => {
+    refreshShortcuts();
   }, [filters]);
 
   return (
@@ -34,7 +38,7 @@ function App() {
           <Filters filters={filters} onChange={filters => setFilters(filters)}/>
         </Container>
         <Container>
-          <ShortcutForm/>
+          <ShortcutForm onSave={() => refreshShortcuts()}/>
         </Container>
         <Container>
           <ShortcutList shortcuts={shortcuts} loading={isShortcutsLoading}/>
