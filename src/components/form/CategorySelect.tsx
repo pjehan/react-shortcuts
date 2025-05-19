@@ -1,23 +1,14 @@
-import { useEffect, useState } from "react";
 import Select from "react-select";
-import type { Category } from "../../lib/interfaces";
-import { getCollection } from "../../lib/api";
+import { useApp } from "../../AppContext";
 
 interface Props {
     onChange: (categories: number[]) => void;
 }
 
 export default function CategorySelect({ onChange }: Props) {
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => {
-        setIsLoading(true);
-        getCollection<Category>('categories').then(data => {
-            setCategories(data);
-            setIsLoading(false);
-        });
-    }, []);
+    const state = useApp();
+    const categories = state?.categories || [];
+    const isLoading = state?.isCategoriesLoading || false;
 
     const categoryOptions = categories.map(category => ({ value: category.id, label: category.name }));
 

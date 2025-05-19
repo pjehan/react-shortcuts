@@ -1,24 +1,15 @@
-import { useEffect, useState } from "react";
 import Select from "react-select";
-import type { Software } from "../../lib/interfaces";
-import { getCollection } from "../../lib/api";
+import { useApp } from "../../AppContext";
 
 interface Props {
     onChange: (software: number | null) => void;
 }
 
 export default function SoftwareSelect({ onChange }: Props) {
-    const [softwares, setSoftwares] = useState<Software[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => {
-        setIsLoading(true);
-        getCollection<Software>('software').then(data => {
-            setSoftwares(data);
-            setIsLoading(false);
-        });
-    }, []);
-
+    const state = useApp();
+    const softwares = state?.software || [];
+    const isLoading = state?.isSoftwareLoading || false;
+    
     const softwareOptions = softwares.map(software => ({ value: software.id, label: software.name }));
 
     return (
